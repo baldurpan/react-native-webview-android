@@ -12,6 +12,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.content.Intent;
 
 import com.facebook.react.common.SystemClock;
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -31,6 +32,16 @@ class RNWebView extends WebView implements LifecycleEventListener {
 
     protected class EventWebClient extends WebViewClient {
         public boolean shouldOverrideUrlLoading(WebView view, String url){
+
+            String key = "external:";
+
+            if(url.contains(key)) {
+                Intent i;
+                i = new Intent(Intent.ACTION_VIEW, Uri.parse(url.substring(key.length())));
+                view.getContext().startActivity(i);
+                return true;
+            }
+
             if(RNWebView.this.getAllowUrlRedirect()) {
                 // do your handling codes here, which url is the requested url
                 // probably you need to open that url rather than redirect:
